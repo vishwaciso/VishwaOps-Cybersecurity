@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Cybersecurity Learning Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --cyber-blue: #0abdc6;
+            --cyber-purple: #711c91;
+            --cyber-pink: #ea00d9;
+            --cyber-dark: #0f2027;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cyber-dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Cyber Rain Animation */
+        .cyber-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, transparent, var(--cyber-blue));
+            animation: rain linear infinite;
+            opacity: 0.6;
+        }
+        
+        .raindrop::before {
+            content: attr(data-attack);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: var(--cyber-pink);
+            font-size: 10px;
+            white-space: nowrap;
+            text-shadow: 0 0 5px rgba(234, 0, 217, 0.7);
+        }
+        
+        @keyframes rain {
+            0% { transform: translateY(-100vh) rotate(10deg); }
+            100% { transform: translateY(100vh) rotate(10deg); }
+        }
+        
+        .umbrella-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .umbrella {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .umbrella-svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--cyber-purple);
+            filter: drop-shadow(0 0 15px rgba(113, 28, 145, 0.7));
+        }
+        
+        .umbrella-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            z-index: 3;
+            text-shadow: 0 0 10px var(--cyber-blue);
+        }
+        
+        .umbrella-title h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--cyber-blue);
+        }
+        
+        .umbrella-title p {
+            font-size: 1rem;
+            color: var(--cyber-pink);
+        }
+        
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        
+        .domain-card {
+            background: rgba(15, 32, 39, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--cyber-blue);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+        
+        .domain-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--cyber-purple), var(--cyber-pink));
+            background-size: 200% 200%;
+            border-radius: 12px;
+            opacity: 0;
+            transition: 0.5s;
+            animation: gradientBG 5s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .domain-card:hover::before {
+            opacity: 0.3;
+        }
+        
+        .domain-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        
+        .domain-card h3 {
+            color: var(--cyber-blue);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .domain-card h3 i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .domain-card p {
+            font-size: 0.9rem;
+            color: #d1d1d1;
+        }
+        
+        /* Main Path Styles */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-pink), var(--cyber-blue));
+            animation: headerGlow 3s linear infinite;
+        }
+        
+        @keyframes headerGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(10, 189, 198, 0.5);
+            animation: fadeIn 1s ease-in-out, textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from { text-shadow: 0 0 5px rgba(10, 189, 198, 0.5); }
+            to { text-shadow: 0 0 15px rgba(10, 189, 198, 0.8), 0 0 20px rgba(234, 0, 217, 0.6); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--cyber-blue);
+            margin-bottom: 20px;
+        }
+        
+        .prerequisites {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: var(--cyber-pink);
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .path-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .connector-line {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--cyber-blue), transparent);
+            z-index: 1;
+        }
+        
+        .level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .box {
+            background: rgba(15, 32, 39, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 20px;
+            margin: 15px;
+            width: 280px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--cyber-blue);
+            cursor: pointer;
+        }
+        
+        .box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--cyber-purple), var(--cyber-pink));
+            background-size: 200% 200%;
+            border-radius: 12px;
+            opacity: 0;
+            transition: 0.5s;
+            animation: gradientBG 5s ease infinite;
+        }
+        
+        .box:hover::before {
+            opacity: 0.3;
+        }
+        
+        .box:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .box h3 {
+            color: var(--cyber-blue);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(10, 189, 198, 0.3);
+        }
+        
+        .box p {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #d1d1d1;
+        }
+        
+        .box strong {
+            color: var(--cyber-blue);
+            font-weight: 500;
+        }
+        
+        .box ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .box li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #d1d1d1;
+        }
+        
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid rgba(10, 189, 198, 0.3);
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: -15px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--cyber-blue);
+            animation: arrowPulse 2s infinite;
+        }
+        
+        @keyframes arrowPulse {
+            0% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+            100% { opacity: 0.3; transform: translateY(0); }
+        }
+        
+        /* Detailed View */
+        .detail-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .detail-view.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .detail-content {
+            background: var(--cyber-dark);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 30px rgba(10, 189, 198, 0.5);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .detail-view.active .detail-content {
+            transform: scale(1);
+        }
+        
+        .close-detail {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--cyber-pink);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-detail:hover {
+            transform: rotate(90deg);
+        }
+        
+        .detail-content h2 {
+            color: var(--cyber-blue);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 1px solid rgba(10, 189, 198, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .detail-section {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid var(--cyber-pink);
+        }
+        
+        .detail-section h3 {
+            color: var(--cyber-pink);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-section h3 i {
+            margin-right: 10px;
+        }
+        
+        /* Controls */
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--cyber-blue), var(--cyber-purple));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-blue));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-reset {
+            background: linear-gradient(135deg, var(--accent), #c0392b);
+        }
+        
+        .btn-reset::before {
+            background: linear-gradient(135deg, #c0392b, var(--accent));
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .box {
+                width: 100%;
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .umbrella {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .umbrella-title h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Rain Animation -->
+    <div class="cyber-rain" id="cyberRain"></div>
+    
+    <!-- Umbrella Section -->
+    <div class="umbrella-container">
+        <div class="umbrella">
+            <svg class="umbrella-svg" viewBox="0 0 512 512">
+                <path d="M414.1,227.6c-1.8-10.4-4.4-20.3-7.7-29.7c-16.8-47.6-47.4-85.4-86.1-110C281.2,62.2,253.7,51,224,51
+                c-29.7,0-57.2,11.2-96.3,36.9c-38.7,24.6-69.3,62.4-86.1,110c-3.3,9.4-5.9,19.3-7.7,29.7c-2.5,14.8-3.8,30.2-3.8,45.9
+                c0,28.3,6.2,55.2,17.2,79.7c11.7,26.1,28.7,48.6,49.6,66.3c20.9,17.7,45.4,30.1,71.8,36.7c3.3,0.8,6.6,1.5,10,2.2v35.5h160v-35.5
+                c3.4-0.7,6.7-1.4,10-2.2c26.4-6.6,50.9-19,71.8-36.7c20.9-17.7,37.9-40.2,49.6-66.3c11-24.5,17.2-51.4,17.2-79.7
+                C417.9,257.8,416.6,242.4,414.1,227.6z"/>
+            </svg>
+            <div class="umbrella-title">
+                <h2>CYBERSECURITY DOMAINS</h2>
+                <p>Protection Against Digital Threats</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Domains Grid -->
+    <div class="container">
+        <div class="domains-grid" id="domainsGrid">
+            <!-- Domains will be added by JavaScript -->
+        </div>
+    </div>
+    
+    <!-- Main Path Content -->
+    <div class="container">
+        <header>
+            <h1>CYBERSECURITY LEARNING PATH</h1>
+            <p class="subtitle">Your roadmap to becoming a cybersecurity professional</p>
+        </header>
+        
+        <div class="controls">
+            <button class="btn" id="animateBtn">
+                <i class="fas fa-play"></i> Animate Path
+            </button>
+            <button class="btn btn-reset" id="resetBtn">
+                <i class="fas fa-sync-alt"></i> Reset
+            </button>
+            <button class="btn" id="viewDomains">
+                <i class="fas fa-shield-alt"></i> View All Domains
+            </button>
+        </div>
+        
+        <div class="path-container">
+            <div class="prerequisites">Common Prerequisites</div>
+            <div class="connector-line" style="height: 40px; top: 0;"></div>
+            
+            <!-- Level 1: Core Skills -->
+            <div class="level" id="core-skills">
+                <div class="box" id="networking">
+                    <h3>1. Networking Fundamentals</h3>
+                    <p><strong>Essential knowledge for all security professionals</strong></p>
+                    <ul>
+                        <li>TCP/IP model and OSI layers</li>
+                        <li>IP addressing and subnetting</li>
+                        <li>Firewalls, VPNs, and network segmentation</li>
+                        <li>DNS, DHCP, HTTP/HTTPS protocols</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="os">
+                    <h3>2. Operating Systems</h3>
+                    <p><strong>Master both Windows and Linux environments</strong></p>
+                    <ul>
+                        <li>Windows: AD, Event Logs, User Management</li>
+                        <li>Linux: CLI, File Permissions, Services</li>
+                        <li>System hardening techniques</li>
+                        <li>Log analysis and monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="programming">
+                    <h3>3. Programming/Scripting</h3>
+                    <p><strong>Automate tasks and analyze security issues</strong></p>
+                    <ul>
+                        <li>Python for security tools</li>
+                        <li>Bash for Linux automation</li>
+                        <li>PowerShell for Windows administration</li>
+                        <li>Basic coding logic and algorithms</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="cyber-fundamentals">
+                    <h3>4. Cybersecurity Fundamentals</h3>
+                    <p><strong>Core security concepts and principles</strong></p>
+                    <ul>
+                        <li>CIA Triad (Confidentiality, Integrity, Availability)</li>
+                        <li>Threats & Vulnerabilities</li>
+                        <li>Encryption & Hashing</li>
+                        <li>Risk management frameworks</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="security-tools">
+                    <h3>5. Basic Security Tools</h3>
+                    <p><strong>Essential tools for security professionals</strong></p>
+                    <ul>
+                        <li>Antivirus and EDR solutions</li>
+                        <li>Firewalls and IDS/IPS</li>
+                        <li>Wireshark for packet analysis</li>
+                        <li>Logging & Monitoring solutions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="connector-line" style="height: 40px;"></div>
+            <div class="arrow-down"></div>
+            <div class="connector-line" style="height: 40px;"></div>
+            
+            <!-- Level 2: Subdomains -->
+            <div class="level" id="subdomains">
+                <div class="box" id="cloud-sec">
+                    <h3>Cloud Security</h3>
+                    <p><strong>Secure cloud environments and services</strong></p>
+                    <ul>
+                        <li>AWS, Azure, GCP security</li>
+                        <li>IAM and access controls</li>
+                        <li>Container and serverless security</li>
+                        <li>Cloud compliance frameworks</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="app-sec">
+                    <h3>Application Security</h3>
+                    <p><strong>Secure software development lifecycle</strong></p>
+                    <ul>
+                        <li>SAST/DAST tools and techniques</li>
+                        <li>Secure coding practices</li>
+                        <li>OWASP Top 10 vulnerabilities</li>
+                        <li>API security</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="network-sec">
+                    <h3>Network Security</h3>
+                    <p><strong>Protect network infrastructure</strong></p>
+                    <ul>
+                        <li>Firewall configuration</li>
+                        <li>VPN technologies</li>
+                        <li>IDS/IPS systems</li>
+                        <li>Network segmentation</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="soc">
+                    <h3>SOC/CSIRT</h3>
+                    <p><strong>Security operations and incident response</strong></p>
+                    <ul>
+                        <li>Threat detection and hunting</li>
+                        <li>Incident response procedures</li>
+                        <li>SIEM tools</li>
+                        <li>Forensic investigation</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="iam">
+                    <h3>Identity & Access Management</h3>
+                    <p><strong>Control who accesses what</strong></p>
+                    <ul>
+                        <li>IAM frameworks</li>
+                        <li>Multi-factor authentication</li>
+                        <li>Privilege management</li>
+                        <li>Directory services</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="connector-line" style="height: 40px;"></div>
+            <div class="arrow-down"></div>
+            <div class="connector-line" style="height: 40px;"></div>
+            
+            <!-- Level 3: Specializations -->
+            <div class="level" id="specializations">
+                <div class="box" id="soc-analyst">
+                    <h3>SOC Analyst</h3>
+                    <p><strong>Monitor and respond to security events</strong></p>
+                    <ul>
+                        <li>Threat hunting</li>
+                        <li>Alert triage</li>
+                        <li>Incident documentation</li>
+                        <li>Security tool monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="pentesting">
+                    <h3>Pentesting</h3>
+                    <p><strong>Ethical hacking and vulnerability assessment</strong></p>
+                    <ul>
+                        <li>Penetration testing methodologies</li>
+                        <li>Bug bounty programs</li>
+                        <li>Red team exercises</li>
+                        <li>Exploit development</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="grc">
+                    <h3>GRC / Risk Management</h3>
+                    <p><strong>Governance, risk and compliance</strong></p>
+                    <ul>
+                        <li>Risk assessment frameworks</li>
+                        <li>Compliance standards (ISO, NIST)</li>
+                        <li>Audit procedures</li>
+                        <li>Policy development</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="forensics">
+                    <h3>Digital Forensics</h3>
+                    <p><strong>Investigate cyber incidents</strong></p>
+                    <ul>
+                        <li>Evidence collection</li>
+                        <li>Memory analysis</li>
+                        <li>Disk forensics</li>
+                        <li>Network forensics</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="malware">
+                    <h3>Malware Analysis</h3>
+                    <p><strong>Reverse engineer malicious software</strong></p>
+                    <ul>
+                        <li>Static and dynamic analysis</li>
+                        <li>Threat intelligence</li>
+                        <li>Reverse engineering</li>
+                        <li>Sandbox analysis</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="connector-line" style="height: 40px;"></div>
+            <div class="arrow-down"></div>
+            <div class="connector-line" style="height: 40px;"></div>
+            
+            <!-- Level 4: Advanced Specializations -->
+            <div class="level" id="advanced-specializations">
+                <div class="box" id="devsecops">
+                    <h3>DevSecOps</h3>
+                    <p><strong>Integrate security into DevOps</strong></p>
+                    <ul>
+                        <li>Secure CI/CD pipelines</li>
+                        <li>Infrastructure as Code security</li>
+                        <li>Container security</li>
+                        <li>Automated security testing</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="app-hardening">
+                    <h3>Application Hardening</h3>
+                    <p><strong>Secure applications in production</strong></p>
+                    <ul>
+                        <li>Runtime protection (RASP)</li>
+                        <li>Web Application Firewalls</li>
+                        <li>Secure configuration</li>
+                        <li>Patch management</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="cloud-risk">
+                    <h3>Cloud Risk Assessments</h3>
+                    <p><strong>Evaluate cloud security posture</strong></p>
+                    <ul>
+                        <li>Cloud security audits</li>
+                        <li>Compliance assessments</li>
+                        <li>CSPM tools</li>
+                        <li>Cloud architecture reviews</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="awareness">
+                    <h3>Security Awareness</h3>
+                    <p><strong>Train staff on security best practices</strong></p>
+                    <ul>
+                        <li>Phishing simulations</li>
+                        <li>Security training programs</li>
+                        <li>Policy development</li>
+                        <li>Behavioral analytics</li>
+                    </ul>
+                </div>
+                
+                <div class="box" id="iot">
+                    <h3>IoT / OT Security</h3>
+                    <p><strong>Secure industrial and IoT systems</strong></p>
+                    <ul>
+                        <li>ICS/SCADA security</li>
+                        <li>IoT device hardening</li>
+                        <li>Industrial protocols</li>
+                        <li>Embedded systems security</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detailed View -->
+    <div class="detail-view" id="detailView">
+        <div class="detail-content">
+            <span class="close-detail" id="closeDetail">&times;</span>
+            <h2 id="detailTitle">Domain Title</h2>
+            <div class="detail-grid" id="detailGrid">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cyber rain animation with attack types
+        const cyberRain = document.getElementById('cyberRain');
+        const attackTypes = [
+            "DDoS", "Phishing", "SQLi", "XSS", "MITM", "Zero-Day", 
+            "Ransomware", "APT", "Credential Stuffing", "Brute Force",
+            "CSRF", "SSRF", "XXE", "LFI/RFI", "Insecure Deserialization",
+            "API Abuse", "IoT Exploit", "Cloud Misconfig", "Supply Chain",
+            "Insider Threat", "Eavesdropping", "Session Hijack", "DNS Spoof",
+            "BEC", "Malvertising"
+        ];
+        
+        for (let i = 0; i < 50; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'raindrop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDuration = `${2 + Math.random() * 3}s`;
+            drop.style.animationDelay = `${Math.random() * 5}s`;
+            drop.dataset.attack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
+            cyberRain.appendChild(drop);
+        }
+        
+        // Domains data
+        const domains = [
+            {
+                id: "networking",
+                title: "Networking Security",
+                icon: "fa-network-wired",
+                description: "Fundamentals of secure network architecture and protocols",
+                sections: [
+                    {
+                        title: "Core Concepts",
+                        icon: "fa-sitemap",
+                        content: `
+                            <ul>
+                                <li>TCP/IP model and OSI layers</li>
+                                <li>IP addressing and subnetting</li>
+                                <li>DNS, DHCP, HTTP/HTTPS protocols</li>
+                                <li>Routing and switching fundamentals</li>
+                                <li>Network topologies and architectures</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Security Aspects",
+                        icon: "fa-shield-alt",
+                        content: `
+                            <ul>
+                                <li>Firewall configuration (ACLs, rulesets)</li>
+                                <li>VPN technologies (IPSec, SSL/TLS)</li>
+                                <li>Network segmentation strategies</li>
+                                <li>Intrusion Detection/Prevention Systems</li>
+                                <li>Packet analysis and traffic monitoring</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Key Tools",
+                        icon: "fa-tools",
+                        content: `
+                            <p><strong>Wireshark:</strong> Packet capture and analysis</p>
+                            <p><strong>Nmap:</strong> Network discovery and security auditing</p>
+                            <p><strong>Cisco Packet Tracer:</strong> Network simulation</p>
+                            <p><strong>tcpdump:</strong> Command-line packet analyzer</p>
+                        `
+                    },
+                    {
+                        title: "Certifications",
+                        icon: "fa-certificate",
+                        content: `
+                            <p><strong>CompTIA Network+:</strong> Vendor-neutral networking</p>
+                            <p><strong>Cisco CCNA:</strong> Cisco-specific networking</p>
+                            <p><strong>JNCIA-Junos:</strong> Juniper networks</p>
+                        `
+                    }
+                ]
+            },
+            {
+                id: "os",
+                title: "Operating System Security",
+                icon: "fa-desktop",
+                description: "Securing Windows and Linux operating systems",
+                sections: [
+                    {
+                        title: "Windows Security",
+                        icon: "fa-windows",
+                        content: `
+                            <ul>
+                                <li>Active Directory management</li>
+                                <li>Group Policy implementation</li>
+                                <li>User and permission management</li>
+                                <li>Windows Registry fundamentals</li>
+                                <li>PowerShell scripting</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Linux Security",
+                        icon: "fa-linux",
+                        content: `
+                            <ul>
+                                <li>Filesystem hierarchy standard</li>
+                                <li>User/group permissions (chmod, chown)</li>
+                                <li>Package management (apt, yum)</li>
+                                <li>Service management (systemd)</li>
+                                <li>Bash scripting</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Hardening Techniques",
+                        icon: "fa-lock",
+                        content: `
+                            <p><strong>Windows:</strong> CIS Benchmarks, LAPS, Credential Guard</p>
+                            <p><strong>Linux:</strong> SELinux/AppArmor, SSH hardening</p>
+                            <p><strong>Common:</strong> Patch management, least privilege</p>
+                        `
+                    },
+                    {
+                        title: "Certifications",
+                        icon: "fa-certificate",
+                        content: `
+                            <p><strong>CompTIA Linux+:</strong> Linux administration</p>
+                            <p><strong>Microsoft MTA/MCSA:</strong> Windows Server</p>
+                            <p><strong>RHCSA:</strong> Red Hat Certified SysAdmin</p>
+                        `
+                    }
+                ]
+            },
+            // Additional domains would follow the same pattern
+            // Cloud Security, App Security, Network Security, SOC/CSIRT, etc.
+        ];
+        
+        // Populate domains grid
+        const domainsGrid = document.getElementById('domainsGrid');
+        domains.forEach(domain => {
+            const card = document.createElement('div');
+            card.className = 'domain-card';
+            card.innerHTML = `
+                <h3><i class="fas ${domain.icon}"></i> ${domain.title}</h3>
+                <p>${domain.description}</p>
+            `;
+            card.addEventListener('click', () => showDomainDetail(domain));
+            domainsGrid.appendChild(card);
+        });
+        
+        // Show domain detail
+        function showDomainDetail(domain) {
+            const detailView = document.getElementById('detailView');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailGrid = document.getElementById('detailGrid');
+            
+            detailTitle.textContent = domain.title;
+            detailGrid.innerHTML = '';
+            
+            domain.sections.forEach(section => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'detail-section';
+                sectionDiv.innerHTML = `
+                    <h3><i class="fas ${section.icon}"></i> ${section.title}</h3>
+                    ${section.content}
+                `;
+                detailGrid.appendChild(sectionDiv);
+            });
+            
+            detailView.classList.add('active');
+        }
+        
+        // Close detail view
+        document.getElementById('closeDetail').addEventListener('click', () => {
+            document.getElementById('detailView').classList.remove('active');
+        });
+        
+        // View all domains button
+        document.getElementById('viewDomains').addEventListener('click', () => {
+            window.scrollTo({
+                top: document.getElementById('domainsGrid').offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Box click handler for detailed view
+        document.querySelectorAll('.box').forEach(box => {
+            box.addEventListener('click', function() {
+                const domainId = this.id;
+                const domain = domains.find(d => d.id === domainId) || 
+                    {
+                        id: domainId,
+                        title: this.querySelector('h3').textContent,
+                        icon: 'fa-shield-alt',
+                        description: '',
+                        sections: [
+                            {
+                                title: "Overview",
+                                icon: "fa-info-circle",
+                                content: this.innerHTML
+                            }
+                        ]
+                    };
+                showDomainDetail(domain);
+            });
+        });
+        
+        // Animation controls
+        document.getElementById('animateBtn').addEventListener('click', function() {
+            // Reset all animations first
+            document.querySelectorAll('.box, .arrow-down').forEach(el => {
+                el.style.animation = 'none';
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                void el.offsetWidth; // Trigger reflow
+            });
+            
+            // Animate core skills
+            document.querySelectorAll('#core-skills .box').forEach((box, index) => {
+                box.style.animation = `fadeInUp 0.6s forwards ${index * 0.1}s`;
+            });
+            
+            // Animate subdomains
+            setTimeout(() => {
+                document.querySelectorAll('#subdomains .box').forEach((box, index) => {
+                    box.style.animation = `fadeInUp 0.6s forwards ${index * 0.1}s`;
+                });
+                document.querySelectorAll('.arrow-down')[0].style.animation = 'fadeIn 0.6s forwards';
+            }, 600);
+            
+            // Animate specializations
+            setTimeout(() => {
+                document.querySelectorAll('#specializations .box').forEach((box, index) => {
+                    box.style.animation = `fadeInUp 0.6s forwards ${index * 0.1}s`;
+                });
+                document.querySelectorAll('.arrow-down')[1].style.animation = 'fadeIn 0.6s forwards';
+            }, 1200);
+            
+            // Animate advanced specializations
+            setTimeout(() => {
+                document.querySelectorAll('#advanced-specializations .box').forEach((box, index) => {
+                    box.style.animation = `fadeInUp 0.6s forwards ${index * 0.1}s`;
+                });
+                document.querySelectorAll('.arrow-down')[2].style.animation = 'fadeIn 0.6s forwards';
+            }, 1800);
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.querySelectorAll('.box, .arrow-down').forEach(el => {
+                el.style.animation = 'none';
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+            });
+        });
+        
+        // Initial animation on page load
+        window.addEventListener('load', function() {
+            document.getElementById('animateBtn').click();
+        });
+    </script>
+</body>
+</html>
