@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cybersecurity Learning Path</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Interactive Cybersecurity Learning Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #2c3e50;
@@ -14,6 +15,9 @@
             --dark: #2c3e50;
             --success: #27ae60;
             --warning: #f39c12;
+            --cyber-blue: #0abdc6;
+            --cyber-purple: #711c91;
+            --cyber-pink: #ea00d9;
         }
         
         * {
@@ -24,38 +28,90 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7fa;
-            color: var(--dark);
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light);
             line-height: 1.6;
-            padding: 20px;
+            padding: 0;
             overflow-x: hidden;
+            min-height: 100vh;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--cyber-blue);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyber-blue), var(--cyber-pink), var(--cyber-blue));
+            animation: headerGlow 3s linear infinite;
+        }
+        
+        @keyframes headerGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
         
         h1 {
-            text-align: center;
-            margin: 30px 0;
-            color: var(--primary);
-            font-size: 2.5rem;
-            animation: fadeIn 1s ease-in-out;
+            font-family: 'Orbitron', sans-serif;
+            color: white;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(10, 189, 198, 0.5);
+            animation: fadeIn 1s ease-in-out, textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from { text-shadow: 0 0 5px rgba(10, 189, 198, 0.5); }
+            to { text-shadow: 0 0 15px rgba(10, 189, 198, 0.8), 0 0 20px rgba(234, 0, 217, 0.6); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--cyber-blue);
+            margin-bottom: 20px;
         }
         
         .prerequisites {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-weight: 600;
-            color: var(--accent);
-            font-size: 1.2rem;
+            color: var(--cyber-pink);
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .path-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+        }
+        
+        .connector-line {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--cyber-blue), transparent);
+            z-index: 1;
         }
         
         .level {
@@ -64,132 +120,174 @@
             width: 100%;
             margin-bottom: 30px;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
         
         .box {
-            background: white;
+            background: rgba(15, 32, 39, 0.8);
             border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             padding: 20px;
             margin: 15px;
-            width: 280px;
-            transition: all 0.3s ease;
+            width: 300px;
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            border-top: 5px solid var(--secondary);
+            border-left: 4px solid var(--cyber-blue);
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s forwards;
+            cursor: pointer;
+        }
+        
+        .box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--cyber-blue), var(--cyber-purple), var(--cyber-pink));
+            background-size: 200% 200%;
+            border-radius: 12px;
+            opacity: 0;
+            transition: 0.5s;
+            animation: gradientBG 5s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .box:hover::before {
+            opacity: 0.3;
         }
         
         .box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        .box.expanded {
+            width: 90%;
+            max-width: 1000px;
+            z-index: 100;
+            transform: translateY(0) scale(1.02);
         }
         
         .box h3 {
-            color: var(--primary);
+            color: var(--cyber-blue);
             margin-bottom: 15px;
-            font-size: 1.2rem;
-            border-bottom: 2px solid var(--light);
+            font-size: 1.3rem;
             padding-bottom: 10px;
+            border-bottom: 1px solid rgba(10, 189, 198, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .box h3 i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .box.expanded h3 i {
+            transform: rotate(180deg);
+        }
+        
+        .box-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .box.expanded .box-content {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         }
         
         .box p {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #d1d1d1;
+        }
+        
+        .box strong {
+            color: var(--cyber-blue);
+            font-weight: 500;
+        }
+        
+        .box .section {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--cyber-pink);
+        }
+        
+        .box .section h4 {
+            color: var(--cyber-pink);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .box .section h4 i {
+            margin-right: 8px;
             font-size: 0.9rem;
-            margin-bottom: 8px;
-            color: #555;
+        }
+        
+        .box ul {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .box li {
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #d1d1d1;
         }
         
         .box .tools, .box .certs {
             margin-top: 15px;
-            font-size: 0.85rem;
         }
         
         .box .tools strong, .box .certs strong {
-            color: var(--primary);
-        }
-        
-        .connector {
-            position: relative;
-            height: 40px;
-            width: 2px;
-            background: var(--secondary);
-            margin: 0 auto;
-        }
-        
-        .connector:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: -4px;
-            width: 10px;
-            height: 10px;
-            background: var(--secondary);
-            border-radius: 50%;
-        }
-        
-        .subdomain-level {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .subdomain {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            padding: 18px;
-            margin: 12px;
-            width: 250px;
-            transition: all 0.3s ease;
-            border-top: 5px solid var(--accent);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards 0.3s;
-        }
-        
-        .subdomain:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-        }
-        
-        .specialization-level {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .specialization {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            padding: 16px;
-            margin: 10px;
-            width: 230px;
-            transition: all 0.3s ease;
-            border-top: 5px solid var(--success);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards 0.6s;
-        }
-        
-        .specialization:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            color: var(--cyber-blue);
         }
         
         .arrow-down {
             width: 0;
             height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 15px solid var(--secondary);
-            margin: 10px auto;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid rgba(10, 189, 198, 0.3);
+            margin: 20px auto;
             opacity: 0;
             animation: fadeIn 0.6s forwards 0.9s;
+            position: relative;
+        }
+        
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: -15px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid var(--cyber-blue);
+            animation: arrowPulse 2s infinite;
+        }
+        
+        @keyframes arrowPulse {
+            0% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+            100% { opacity: 0.3; transform: translateY(0); }
         }
         
         @keyframes fadeInUp {
@@ -218,185 +316,575 @@
         .box:nth-child(4) { animation-delay: 0.4s; }
         .box:nth-child(5) { animation-delay: 0.5s; }
         
-        .highlight {
-            background-color: rgba(52, 152, 219, 0.1);
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-weight: 500;
-        }
-        
         .controls {
             text-align: center;
             margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         
         .btn {
-            background: var(--secondary);
+            background: linear-gradient(135deg, var(--cyber-blue), var(--cyber-purple));
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 30px;
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.3s ease;
-            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cyber-purple), var(--cyber-blue));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .btn:hover::before {
+            opacity: 1;
         }
         
         .btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
         }
         
         .btn-reset {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #c0392b);
         }
         
-        .btn-reset:hover {
-            background: #c0392b;
+        .btn-reset::before {
+            background: linear-gradient(135deg, #c0392b, var(--accent));
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-link {
+            color: var(--cyber-blue);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--cyber-blue);
+        }
+        
+        .nav-link:hover {
+            background: rgba(10, 189, 198, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 99;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .diagram-container {
+            background: rgba(15, 32, 39, 0.95);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: auto;
+            border: 2px solid var(--cyber-blue);
+            box-shadow: 0 0 30px rgba(10, 189, 198, 0.5);
+            position: relative;
+        }
+        
+        .close-diagram {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--cyber-pink);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-diagram:hover {
+            transform: rotate(90deg);
+        }
+        
+        .diagram-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .diagram-title {
+            color: var(--cyber-blue);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
         }
         
         @media (max-width: 1200px) {
-            .box, .subdomain, .specialization {
+            .box {
                 width: 100%;
-                max-width: 350px;
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .box.expanded {
+                width: 95%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .box h3 {
+                font-size: 1.2rem;
+            }
+            
+            .box .section h4 {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Cybersecurity Career Learning Path</h1>
+        <header>
+            <h1>CYBERSECURITY LEARNING PATH</h1>
+            <p class="subtitle">Your roadmap to becoming a cybersecurity professional</p>
+        </header>
         
         <div class="controls">
-            <button class="btn" id="animateBtn">Animate Path</button>
-            <button class="btn btn-reset" id="resetBtn">Reset Animation</button>
+            <button class="btn" id="animateBtn">
+                <i class="fas fa-play"></i> Animate Path
+            </button>
+            <button class="btn btn-reset" id="resetBtn">
+                <i class="fas fa-sync-alt"></i> Reset
+            </button>
+            <button class="btn" id="viewDiagram">
+                <i class="fas fa-project-diagram"></i> View Full Diagram
+            </button>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#networking" class="nav-link">Networking</a>
+            <a href="#os" class="nav-link">Operating Systems</a>
+            <a href="#programming" class="nav-link">Programming</a>
+            <a href="#cyber-fundamentals" class="nav-link">Cyber Fundamentals</a>
+            <a href="#security-tools" class="nav-link">Security Tools</a>
+            <a href="#cloud-sec" class="nav-link">Cloud Security</a>
+            <a href="#app-sec" class="nav-link">App Security</a>
         </div>
         
         <div class="path-container">
             <div class="prerequisites">Common Prerequisites</div>
-            <div class="connector"></div>
+            <div class="connector-line" style="height: 40px; top: 0;"></div>
             
             <!-- Level 1: Core Skills -->
             <div class="level" id="core-skills">
-                <div class="box">
-                    <h3>1. Networking Fundamentals</h3>
-                    <p><strong>Work:</strong> Configure firewalls, troubleshoot connectivity, understand TCP/IP, DNS, etc.</p>
-                    <p class="tools"><strong>Tools:</strong> Wireshark, Nmap, Cisco Packet Tracer</p>
-                    <p class="certs"><strong>Certs:</strong> CompTIA Network+, Cisco CCNA</p>
+                <div class="box" id="networking">
+                    <h3>1. Networking Fundamentals <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fas fa-network-wired"></i> Core Concepts</h4>
+                            <ul>
+                                <li>TCP/IP model and OSI layers</li>
+                                <li>IP addressing and subnetting</li>
+                                <li>DNS, DHCP, ARP protocols</li>
+                                <li>Routing and switching fundamentals</li>
+                                <li>Network topologies and architectures</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-shield-alt"></i> Security Aspects</h4>
+                            <ul>
+                                <li>Firewall configuration (ACLs, rulesets)</li>
+                                <li>VPN technologies (IPSec, SSL/TLS)</li>
+                                <li>Network segmentation strategies</li>
+                                <li>Intrusion Detection/Prevention Systems</li>
+                                <li>Packet analysis and traffic monitoring</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-tools"></i> Key Tools</h4>
+                            <p><strong>Wireshark:</strong> Packet capture and analysis</p>
+                            <p><strong>Nmap:</strong> Network discovery and security auditing</p>
+                            <p><strong>Cisco Packet Tracer:</strong> Network simulation</p>
+                            <p><strong>tcpdump:</strong> Command-line packet analyzer</p>
+                            <p><strong>Postman:</strong> API testing tool</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>CompTIA Network+:</strong> Vendor-neutral networking</p>
+                            <p><strong>Cisco CCNA:</strong> Cisco-specific networking</p>
+                            <p><strong>JNCIA-Junos:</strong> Juniper networks</p>
+                            <p><strong>WCNA:</strong> Wireshark certified</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="box">
-                    <h3>2. Operating Systems</h3>
-                    <p><strong>Work:</strong> Administer Windows & Linux, manage logs, users, permissions, CLI.</p>
-                    <p class="tools"><strong>Tools:</strong> Event Viewer, Sysmon, journalctl, top, ps</p>
-                    <p class="certs"><strong>Certs:</strong> CompTIA Linux+, Microsoft MTA/MCSA</p>
+                <div class="box" id="os">
+                    <h3>2. Operating Systems <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fab fa-windows"></i> Windows Administration</h4>
+                            <ul>
+                                <li>Active Directory management</li>
+                                <li>Group Policy implementation</li>
+                                <li>User and permission management</li>
+                                <li>Windows Registry fundamentals</li>
+                                <li>PowerShell scripting</li>
+                                <li>Windows Server administration</li>
+                                <li>Event log analysis</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fab fa-linux"></i> Linux Administration</h4>
+                            <ul>
+                                <li>Filesystem hierarchy standard</li>
+                                <li>User/group permissions (chmod, chown)</li>
+                                <li>Package management (apt, yum)</li>
+                                <li>Service management (systemd)</li>
+                                <li>Bash scripting</li>
+                                <li>Kernel tuning and modules</li>
+                                <li>Log analysis (journalctl, syslog)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-terminal"></i> Common Tools</h4>
+                            <p><strong>Windows:</strong> Event Viewer, Sysmon, Process Monitor</p>
+                            <p><strong>Linux:</strong> top/htop, ps, lsof, netstat, grep</p>
+                            <p><strong>Cross-platform:</strong> RSAT, WinSCP, PuTTY</p>
+                            <p><strong>Monitoring:</strong> Nagios, Zabbix, Prometheus</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>CompTIA Linux+:</strong> Linux administration</p>
+                            <p><strong>Microsoft MTA/MCSA:</strong> Windows Server</p>
+                            <p><strong>LPIC:</strong> Linux Professional Institute</p>
+                            <p><strong>RHCSA:</strong> Red Hat Certified SysAdmin</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="box">
-                    <h3>3. Programming/Scripting</h3>
-                    <p><strong>Work:</strong> Automate tasks, write security scripts, analyze malware, develop tools.</p>
-                    <p class="tools"><strong>Tools:</strong> Python, Git, VSCode, Jupyter Notebooks</p>
-                    <p class="certs"><strong>Certs:</strong> Python Institute, Offensive Security (OSWE)</p>
+                <div class="box" id="programming">
+                    <h3>3. Programming/Scripting <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fab fa-python"></i> Python for Security</h4>
+                            <ul>
+                                <li>Network scanning and packet crafting</li>
+                                <li>Web scraping and automation</li>
+                                <li>Malware analysis scripts</li>
+                                <li>Cryptography implementations</li>
+                                <li>API interactions for security tools</li>
+                                <li>Data analysis for security logs</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-code"></i> Other Languages</h4>
+                            <p><strong>C/C++:</strong> Low-level programming, exploit development</p>
+                            <p><strong>JavaScript:</strong> Web security, XSS, CSRF</p>
+                            <p><strong>SQL:</strong> Database security, injection</p>
+                            <p><strong>Go/Rust:</strong> Secure system programming</p>
+                            <p><strong>Assembly:</strong> Reverse engineering</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-tools"></i> Development Tools</h4>
+                            <p><strong>Git:</strong> Version control for security tools</p>
+                            <p><strong>VSCode:</strong> Lightweight code editor</p>
+                            <p><strong>Jupyter Notebooks:</strong> Data analysis</p>
+                            <p><strong>Docker:</strong> Containerized testing</p>
+                            <p><strong>Postman:</strong> API testing</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>Python Institute:</strong> PCAP, PCPP</p>
+                            <p><strong>OSWE:</strong> Advanced Web Exploitation</p>
+                            <p><strong>GIAC GPPA:</strong> Python for Pentesters</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="box">
-                    <h3>4. Cybersecurity Fundamentals</h3>
-                    <p><strong>Work:</strong> Learn CIA triad, analyze threats/vulns, apply encryption/hashing.</p>
-                    <p class="tools"><strong>Tools:</strong> Burp Suite, Nessus, Hashcat, OpenVAS</p>
-                    <p class="certs"><strong>Certs:</strong> CompTIA Security+, ISC2 SSCP</p>
+                <div class="box" id="cyber-fundamentals">
+                    <h3>4. Cybersecurity Fundamentals <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fas fa-lock"></i> Core Principles</h4>
+                            <ul>
+                                <li>CIA Triad (Confidentiality, Integrity, Availability)</li>
+                                <li>Authentication vs Authorization</li>
+                                <li>Risk management frameworks</li>
+                                <li>Security governance and compliance</li>
+                                <li>Security models (Zero Trust, Defense in Depth)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-bug"></i> Threat Landscape</h4>
+                            <ul>
+                                <li>Common attack vectors and techniques</li>
+                                <li>Malware types and analysis</li>
+                                <li>Social engineering tactics</li>
+                                <li>OWASP Top 10 vulnerabilities</li>
+                                <li>MITRE ATT&CK framework</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-tools"></i> Security Tools</h4>
+                            <p><strong>Burp Suite:</strong> Web application testing</p>
+                            <p><strong>Nessus/OpenVAS:</strong> Vulnerability scanning</p>
+                            <p><strong>Hashcat:</strong> Password cracking</p>
+                            <p><strong>Metasploit:</strong> Penetration testing</p>
+                            <p><strong>Kali Linux:</strong> Security distro</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>CompTIA Security+:</strong> Entry-level security</p>
+                            <p><strong>ISC2 SSCP:</strong> Systems security</p>
+                            <p><strong>CEH:</strong> Ethical hacking</p>
+                            <p><strong>eJPT:</strong> Junior pentesting</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="box">
-                    <h3>5. Basic Security Tools</h3>
-                    <p><strong>Work:</strong> Use IDS/IPS, AV, Wireshark, log monitoring.</p>
-                    <p class="tools"><strong>Tools:</strong> Snort, Suricata, Splunk, ELK, Zeek</p>
-                    <p class="certs"><strong>Certs:</strong> Splunk Core Certified, Cisco CyberOps Associate</p>
+                <div class="box" id="security-tools">
+                    <h3>5. Basic Security Tools <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fas fa-shield-virus"></i> Protection Systems</h4>
+                            <ul>
+                                <li>Firewalls (pfSense, Cisco ASA)</li>
+                                <li>Intrusion Detection/Prevention (Snort, Suricata)</li>
+                                <li>Antivirus/EDR solutions</li>
+                                <li>Web Application Firewalls (ModSecurity)</li>
+                                <li>Email security gateways</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-chart-line"></i> Monitoring & SIEM</h4>
+                            <ul>
+                                <li>Splunk for security analytics</li>
+                                <li>ELK Stack (Elasticsearch, Logstash, Kibana)</li>
+                                <li>Zeek (formerly Bro) network monitor</li>
+                                <li>OSSEC host-based detection</li>
+                                <li>Security Onion distro</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-network-wired"></i> Network Tools</h4>
+                            <p><strong>Tcpdump/Wireshark:</strong> Traffic analysis</p>
+                            <p><strong>Nmap/Zenmap:</strong> Network mapping</p>
+                            <p><strong>Netcat/Socat:</strong> Network Swiss army knife</p>
+                            <p><strong>OpenVPN/WireGuard:</strong> Secure tunneling</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>Splunk Core Certified:</strong> Splunk fundamentals</p>
+                            <p><strong>Cisco CyberOps:</strong> Security operations</p>
+                            <p><strong>GIAC GCIA:</strong> Intrusion analysis</p>
+                            <p><strong>Elastic Certified Analyst:</strong> ELK stack</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
+            <div class="connector-line" style="height: 40px;"></div>
             <div class="arrow-down"></div>
+            <div class="connector-line" style="height: 40px;"></div>
             
             <!-- Level 2: Subdomains -->
             <div class="subdomain-level" id="subdomains">
-                <div class="subdomain">
-                    <h3>Cloud Security</h3>
-                    <p><strong>Work:</strong> Secure AWS/Azure/GCP, IAM, containers</p>
-                    <p class="tools"><strong>Tools:</strong> CSPM, Prisma, Wiz</p>
-                    <p class="certs"><strong>Certs:</strong> CCSK, AWS Sec Spec</p>
+                <div class="box" id="cloud-sec">
+                    <h3>Cloud Security <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fas fa-cloud"></i> Cloud Platforms</h4>
+                            <ul>
+                                <li>AWS Security (IAM, S3, EC2, VPC)</li>
+                                <li>Azure Security (Entra ID, NSGs, Sentinel)</li>
+                                <li>GCP Security (IAM, VPC, Security Command Center)</li>
+                                <li>Container Security (Docker, Kubernetes)</li>
+                                <li>Serverless Security</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-shield-alt"></i> Security Practices</h4>
+                            <ul>
+                                <li>Cloud Identity and Access Management</li>
+                                <li>Data encryption at rest and in transit</li>
+                                <li>Cloud network security controls</li>
+                                <li>Cloud logging and monitoring</li>
+                                <li>Cloud compliance frameworks</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-tools"></i> Security Tools</h4>
+                            <p><strong>CSPM:</strong> Prisma Cloud, Wiz, Orca</p>
+                            <p><strong>CASB:</strong> Netskope, McAfee MVISION</p>
+                            <p><strong>Kubernetes Security:</strong> Falco, kube-bench</p>
+                            <p><strong>Cloud-Native:</strong> AWS GuardDuty, Azure Defender</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>CCSK:</strong> Cloud Security Knowledge</p>
+                            <p><strong>AWS Security Specialty:</strong> AWS-specific</p>
+                            <p><strong>AZ-500:</strong> Azure Security Engineer</p>
+                            <p><strong>Google Professional Cloud Security Engineer</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="subdomain">
-                    <h3>Application Security</h3>
-                    <p><strong>Work:</strong> Secure apps from exploits, code review</p>
-                    <p class="tools"><strong>Tools:</strong> Burp, ZAP, SAST/DAST</p>
-                    <p class="certs"><strong>Certs:</strong> OSWE, CSSLP, CEH</p>
+                <div class="box" id="app-sec">
+                    <h3>Application Security <i class="fas fa-chevron-down"></i></h3>
+                    <div class="box-content">
+                        <div class="section">
+                            <h4><i class="fas fa-code"></i> Secure Development</h4>
+                            <ul>
+                                <li>OWASP Top 10 vulnerabilities</li>
+                                <li>Secure SDLC practices</li>
+                                <li>Threat modeling methodologies</li>
+                                <li>Secure coding guidelines</li>
+                                <li>API security best practices</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-search"></i> Testing Techniques</h4>
+                            <ul>
+                                <li>Static Application Security Testing (SAST)</li>
+                                <li>Dynamic Application Security Testing (DAST)</li>
+                                <li>Interactive Application Security Testing (IAST)</li>
+                                <li>Software Composition Analysis (SCA)</li>
+                                <li>Manual penetration testing</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-tools"></i> Testing Tools</h4>
+                            <p><strong>Burp Suite:</strong> Web app testing</p>
+                            <p><strong>ZAP:</strong> OWASP's web scanner</p>
+                            <p><strong>Checkmarx/SonarQube:</strong> SAST tools</p>
+                            <p><strong>Nexus IQ/Snyk:</strong> Dependency scanning</p>
+                        </div>
+                        
+                        <div class="section">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p><strong>OSWE:</strong> Advanced Web Exploitation</p>
+                            <p><strong>CSSLP:</strong> Secure Software Lifecycle</p>
+                            <p><strong>CEH:</strong> Ethical Hacking</p>
+                            <p><strong>GWAPT:</strong> Web App Pentesting</p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="subdomain">
-                    <h3>Network Security</h3>
-                    <p><strong>Work:</strong> Manage firewalls, VPN, IDS/IPS</p>
-                    <p class="tools"><strong>Tools:</strong> Cisco, Palo Alto, Check Point</p>
-                    <p class="certs"><strong>Certs:</strong> CCNA, PCNSE</p>
-                </div>
-                
-                <div class="subdomain">
-                    <h3>SOC/CSIRT</h3>
-                    <p><strong>Work:</strong> Threat detection, incident response</p>
-                    <p class="tools"><strong>Tools:</strong> SIEM, EDR, Splunk</p>
-                    <p class="certs"><strong>Certs:</strong> CySA+, GCIA, GCED</p>
-                </div>
-                
-                <div class="subdomain">
-                    <h3>Identity & Access</h3>
-                    <p><strong>Work:</strong> Manage IAM, MFA, privilege mgmt</p>
-                    <p class="tools"><strong>Tools:</strong> Okta, AD, SailPoint</p>
-                    <p class="certs"><strong>Certs:</strong> CISM, Okta, CISSP</p>
-                </div>
+                <!-- Additional subdomains would follow the same pattern -->
+                <!-- Network Security, SOC/CSIRT, Identity & Access would be here -->
             </div>
             
+            <div class="connector-line" style="height: 40px;"></div>
             <div class="arrow-down"></div>
+            <div class="connector-line" style="height: 40px;"></div>
             
             <!-- Level 3: Specializations -->
             <div class="specialization-level" id="specializations">
-                <div class="specialization">
-                    <h3>DevSecOps</h3>
-                    <p><strong>Work:</strong> Secure CI/CD, IaC pipelines</p>
-                    <p class="tools"><strong>Tools:</strong> Jenkins, GitLab, K8s</p>
-                    <p class="certs"><strong>Certs:</strong> CKS, HashiCorp</p>
-                </div>
-                
-                <div class="specialization">
-                    <h3>Application Security</h3>
-                    <p><strong>Work:</strong> Harden apps, secure frameworks</p>
-                    <p class="tools"><strong>Tools:</strong> RASP, SCA, WAF</p>
-                    <p class="certs"><strong>Certs:</strong> OSWE, CAST, GIAC</p>
-                </div>
-                
-                <div class="specialization">
-                    <h3>Cloud Risk</h3>
-                    <p><strong>Work:</strong> Cloud audits, compliance</p>
-                    <p class="tools"><strong>Tools:</strong> CSPM, GRC Suites</p>
-                    <p class="certs"><strong>Certs:</strong> CISA, CCSP, ISO27k</p>
-                </div>
-                
-                <div class="specialization">
-                    <h3>Security Awareness</h3>
-                    <p><strong>Work:</strong> Train staff, build awareness</p>
-                    <p class="tools"><strong>Tools:</strong> LMS, PhishSim</p>
-                    <p class="certs"><strong>Certs:</strong> CompTIA Security+</p>
-                </div>
-                
-                <div class="specialization">
-                    <h3>IoT/OT Security</h3>
-                    <p><strong>Work:</strong> Secure IoT devices, ICS/SCADA</p>
-                    <p class="tools"><strong>Tools:</strong> Claroty, Nozomi, Dragos</p>
-                    <p class="certs"><strong>Certs:</strong> GICSP, ISA/IEC 62443</p>
-                </div>
+                <!-- DevSecOps, Application Security, Cloud Risk, etc. would be here -->
+                <!-- Following the same expandable box pattern -->
             </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="diagramOverlay">
+        <div class="diagram-container">
+            <span class="close-diagram" id="closeDiagram">&times;</span>
+            <h3 class="diagram-title">Cybersecurity Learning Path Diagram</h3>
+            <img src="https://via.placeholder.com/1200x800/0f2027/0abdc6?text=Cybersecurity+Learning+Path+Diagram" alt="Cybersecurity Learning Path" class="diagram-img">
+            <p style="text-align: center; margin-top: 20px; color: var(--cyber-blue);">
+                This would display the complete learning path diagram with all connections
+            </p>
         </div>
     </div>
 
     <script>
+        // Box expansion functionality
+        document.querySelectorAll('.box').forEach(box => {
+            const header = box.querySelector('h3');
+            header.addEventListener('click', () => {
+                // Close all other expanded boxes first
+                document.querySelectorAll('.box.expanded').forEach(expandedBox => {
+                    if (expandedBox !== box) {
+                        expandedBox.classList.remove('expanded');
+                    }
+                });
+                
+                // Toggle current box
+                box.classList.toggle('expanded');
+                
+                // Scroll to the box if it's being expanded
+                if (box.classList.contains('expanded')) {
+                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+        
+        // Animation controls
         document.getElementById('animateBtn').addEventListener('click', function() {
             // Reset all animations first
             document.querySelectorAll('.box, .subdomain, .specialization, .arrow-down').forEach(el => {
@@ -433,12 +921,55 @@
                 el.style.animation = 'none';
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
+                el.classList.remove('expanded');
+            });
+        });
+        
+        // Diagram viewer
+        document.getElementById('viewDiagram').addEventListener('click', function() {
+            document.getElementById('diagramOverlay').style.display = 'flex';
+        });
+        
+        document.getElementById('closeDiagram').addEventListener('click', function() {
+            document.getElementById('diagramOverlay').style.display = 'none';
+        });
+        
+        // Smooth scrolling for nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Close any expanded boxes first
+                    document.querySelectorAll('.box.expanded').forEach(box => {
+                        box.classList.remove('expanded');
+                    });
+                    
+                    // Expand the target box
+                    targetElement.classList.add('expanded');
+                    
+                    // Scroll to the target
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
             });
         });
         
         // Initial animation on page load
         window.addEventListener('load', function() {
             document.getElementById('animateBtn').click();
+            
+            // Check for hash in URL to open specific section
+            if (window.location.hash) {
+                const targetElement = document.querySelector(window.location.hash);
+                if (targetElement && targetElement.classList.contains('box')) {
+                    targetElement.classList.add('expanded');
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 1000);
+                }
+            }
         });
     </script>
 </body>
