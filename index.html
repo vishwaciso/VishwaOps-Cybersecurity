@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Cybersecurity Learning Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --cyber-blue: #0abdc6;
+            --cyber-purple: #711c91;
+            --cyber-pink: #ea00d9;
+            --cyber-dark: #0f2027;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cyber-dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Cyber Rain Animation - Slower version */
+        .cyber-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .raindrop {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, var(--cyber-blue));
+            animation: rain linear infinite;
+            opacity: 0.4;
+        }
+        
+        .raindrop::before {
+            content: attr(data-attack);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: var(--cyber-pink);
+            font-size: 10px;
+            white-space: nowrap;
+            text-shadow: 0 0 5px rgba(234, 0, 217, 0.7);
+            opacity: 0.8;
+        }
+        
+        @keyframes rain {
+            0% { transform: translateY(-100vh) rotate(5deg); }
+            100% { transform: translateY(100vh) rotate(5deg); }
+        }
+        
+        /* Enhanced Umbrella Animation */
+        .umbrella-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 50px;
+            perspective: 1000px;
+        }
+        
+        .umbrella {
+            width: 350px;
+            height: 350px;
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+            animation: umbrellaFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes umbrellaFloat {
+            0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(0); }
+            50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
+        }
+        
+        .umbrella-canvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .umbrella-top {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(
+                var(--cyber-purple),
+                #5a189a,
+                #7b2cbf,
+                #9d4edd,
+                #c77dff,
+                #e0aaff,
+                var(--cyber-purple)
+            );
+            border-radius: 50% 50% 0 0;
+            transform: rotateX(70deg);
+            box-shadow: 0 0 30px rgba(123, 44, 191, 0.6);
+            border: 2px solid rgba(234, 0, 217, 0.3);
+        }
+        
+        .umbrella-ribs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .umbrella-rib {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--cyber-pink), transparent);
+            top: 0;
+            left: 50%;
+            transform-origin: bottom center;
+        }
+        
+        .umbrella-pole {
+            position: absolute;
+            width: 10px;
+            height: 200px;
+            background: linear-gradient(to bottom, #333, #666);
+            bottom: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .umbrella-handle {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(to bottom, #666, #333);
+            bottom: -260px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .umbrella-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            z-index: 3;
+            text-shadow: 0 0 10px var(--cyber-blue);
+            width: 100%;
+            padding: 20px;
+            background: rgba(15, 32, 39, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(10, 189, 198, 0.3);
+            border: 1px solid var(--cyber-blue);
+        }
+        
+        .umbrella-title h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--cyber-blue);
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .umbrella-title p {
+            font-size: 1rem;
+            color: var(--cyber-pink);
+        }
+        
+        /* Rest of your existing CSS styles... */
+        
+    </style>
+</head>
+<body>
+    <!-- Cyber Rain Animation - Slower version -->
+    <div class="cyber-rain" id="cyberRain"></div>
+    
+    <!-- Enhanced Umbrella Section -->
+    <div class="umbrella-container">
+        <div class="umbrella">
+            <div class="umbrella-canvas">
+                <div class="umbrella-top"></div>
+                <div class="umbrella-ribs" id="umbrellaRibs"></div>
+                <div class="umbrella-pole"></div>
+                <div class="umbrella-handle"></div>
+            </div>
+            <div class="umbrella-title">
+                <h2>CYBERSECURITY DOMAINS</h2>
+                <p>Protection Against Digital Threats</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Rest of your HTML content... -->
+
+    <script>
+        // Slower cyber rain animation with attack types
+        const cyberRain = document.getElementById('cyberRain');
+        const attackTypes = [
+            "DDoS", "Phishing", "SQLi", "XSS", "MITM", "Zero-Day", 
+            "Ransomware", "APT", "Credential Stuffing", "Brute Force",
+            "CSRF", "SSRF", "XXE", "LFI/RFI", "Insecure Deserialization",
+            "API Abuse", "IoT Exploit", "Cloud Misconfig", "Supply Chain",
+            "Insider Threat", "Eavesdropping", "Session Hijack", "DNS Spoof",
+            "BEC", "Malvertising"
+        ];
+        
+        for (let i = 0; i < 40; i++) { // Reduced number of raindrops
+            const drop = document.createElement('div');
+            drop.className = 'raindrop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDuration = `${4 + Math.random() * 4}s`; // Slower animation
+            drop.style.animationDelay = `${Math.random() * 5}s`;
+            drop.dataset.attack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
+            cyberRain.appendChild(drop);
+        }
+        
+        // Create umbrella ribs
+        const umbrellaRibs = document.getElementById('umbrellaRibs');
+        for (let i = 0; i < 8; i++) {
+            const rib = document.createElement('div');
+            rib.className = 'umbrella-rib';
+            rib.style.transform = `rotate(${i * 45}deg)`;
+            umbrellaRibs.appendChild(rib);
+        }
+        
+        // Rest of your JavaScript...
+    </script>
+</body>
+</html>
