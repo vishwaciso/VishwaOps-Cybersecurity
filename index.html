@@ -4,38 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cybersecurity Roadmap</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Framer Motion -->
-  <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
-
   <style>
     body {
       background: #0f172a;
       color: white;
       font-family: 'Inter', sans-serif;
     }
-    .roadmap-card {
+    .card {
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 1rem;
-      padding: 1.5rem;
+      padding: 1rem;
       margin: 1rem auto;
-      max-width: 600px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .roadmap-card:hover {
+    .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-    }
-    .section-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #38bdf8;
     }
     .divider {
       width: 4px;
@@ -44,93 +32,133 @@
       margin: 0 auto;
       border-radius: 2px;
     }
+    .branch {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body class="p-6">
 
-  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8">
-    Cybersecurity Roadmap 🚀
-  </h1>
+  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8">Cybersecurity Roadmap 🚀</h1>
 
-  <div id="roadmap"></div>
+  <!-- Common Path -->
+  <div class="card text-center font-bold text-cyan-300">Common Prerequisites</div>
+  <div class="divider"></div>
 
-  <script>
-    // Roadmap Data
-    const roadmapData = [
-      {
-        title: "1. Networking Fundamentals",
-        work: "Configure firewalls, troubleshoot connectivity, understand TCP/IP, DNS, HTTP/HTTPS, VPNs, Subnets.",
-        tools: "Wireshark, Nmap, Cisco Packet Tracer",
-        certs: "CompTIA Network+, Cisco CCNA"
-      },
-      {
-        title: "2. Operating Systems",
-        work: "Administer Windows & Linux, manage logs, users, permissions, CLI.",
-        tools: "Event Viewer, Sysmon, journalctl, top, ps",
-        certs: "CompTIA Linux+, Microsoft MTA/MCSA"
-      },
-      {
-        title: "3. Programming / Scripting",
-        work: "Automate tasks, write security scripts, analyze malware, develop tools.",
-        tools: "Python, Git, VSCode, Jupyter Notebooks",
-        certs: "Python Institute, Offensive Security (OSWE)"
-      },
-      {
-        title: "3a. Shell Scripting (Bash)",
-        work: "Automate Linux admin, write log parsers, cronjobs, automate security checks.",
-        tools: "Bash/Zsh, sed, awk, grep, cron",
-        certs: "LPIC-1, CompTIA Linux+",
-        how: "Write scripts to detect anomalies & automate patching"
-      },
-      {
-        title: "3b. PowerShell Scripting",
-        work: "Automate Windows sec, manage AD, extract logs, incident response.",
-        tools: "PowerShell ISE, Empire, BloodHound, PSRead",
-        certs: "Microsoft MCSA, SANS SEC505",
-        how: "Write scripts for user mgmt, log scraping, defense"
-      },
-      {
-        title: "4. Cybersecurity Fundamentals",
-        work: "Learn CIA triad, analyze threats/vulnerabilities, apply encryption/hashing.",
-        tools: "Burp Suite, Nessus, Hashcat, OpenVAS",
-        certs: "CompTIA Security+, ISC2 SSCP"
-      },
-      {
-        title: "5. Basic Security Tools",
-        work: "Use IDS/IPS, Antivirus, Wireshark, log monitoring.",
-        tools: "Snort, Suricata, Splunk, ELK, Zeek",
-        certs: "Splunk Core Certified, Cisco CyberOps Associate"
-      }
-    ];
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">1. Networking Fundamentals</h2>
+    <p><b>Work:</b> Configure firewalls, troubleshoot connectivity, understand TCP/IP, DNS, VPNs</p>
+    <p><b>Tools:</b> Wireshark, Nmap, Cisco Packet Tracer</p>
+    <p><b>Certs:</b> CompTIA Network+, Cisco CCNA</p>
+  </div>
+  <div class="divider"></div>
 
-    // Render Roadmap
-    const container = document.getElementById("roadmap");
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">2. Operating Systems</h2>
+    <p><b>Work:</b> Administer Windows & Linux, manage logs, users, permissions</p>
+    <p><b>Tools:</b> Event Viewer, Sysmon, journalctl</p>
+    <p><b>Certs:</b> CompTIA Linux+, Microsoft MTA/MCSA</p>
+  </div>
+  <div class="divider"></div>
 
-    roadmapData.forEach((step, i) => {
-      const card = document.createElement("div");
-      card.className = "roadmap-card";
-      card.innerHTML = `
-        <h2 class="section-title">${step.title}</h2>
-        <p><strong>Work:</strong> ${step.work}</p>
-        <p><strong>Tools:</strong> ${step.tools}</p>
-        <p><strong>Certifications:</strong> ${step.certs}</p>
-        ${step.how ? `<p><strong>How:</strong> ${step.how}</p>` : ""}
-      `;
-      container.appendChild(card);
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">3. Programming / Scripting</h2>
+    <p><b>Work:</b> Automate tasks, write security scripts, analyze malware</p>
+    <p><b>Tools:</b> Python, Git, VSCode</p>
+    <p><b>Certs:</b> Python Institute, OSWE</p>
+  </div>
+  <div class="divider"></div>
 
-      if (i < roadmapData.length - 1) {
-        const divider = document.createElement("div");
-        divider.className = "divider";
-        container.appendChild(divider);
-      }
-    });
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">3a. Shell Scripting (Bash)</h2>
+    <p><b>Work:</b> Automate Linux admin, logs, cronjobs</p>
+    <p><b>Tools:</b> Bash/Zsh, sed, awk, grep</p>
+    <p><b>Certs:</b> LPIC-1, Linux+</p>
+    <p><b>How:</b> Write scripts to detect anomalies, automate patching</p>
+  </div>
+  <div class="divider"></div>
 
-    // Framer Motion Animations
-    const { animate } = window.framerMotion;
-    document.querySelectorAll(".roadmap-card").forEach((el, idx) => {
-      animate(el, { opacity: [0, 1], y: [50, 0] }, { duration: 0.8, delay: idx * 0.2 });
-    });
-  </script>
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">3b. PowerShell Scripting</h2>
+    <p><b>Work:</b> Automate Windows sec, manage AD, logs</p>
+    <p><b>Tools:</b> PowerShell ISE, Empire, BloodHound</p>
+    <p><b>Certs:</b> Microsoft MCSA, SANS SEC505</p>
+    <p><b>How:</b> Scripts for user mgmt, log scraping, defense</p>
+  </div>
+  <div class="divider"></div>
+
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">4. Cybersecurity Fundamentals</h2>
+    <p><b>Work:</b> CIA triad, threats, encryption</p>
+    <p><b>Tools:</b> Burp Suite, Nessus, Hashcat</p>
+    <p><b>Certs:</b> Security+, SSCP</p>
+  </div>
+  <div class="divider"></div>
+
+  <div class="card">
+    <h2 class="font-bold text-lg text-cyan-400">5. Basic Security Tools</h2>
+    <p><b>Work:</b> IDS/IPS, AV, logs</p>
+    <p><b>Tools:</b> Snort, Suricata, Splunk, Zeek</p>
+    <p><b>Certs:</b> Splunk Core, Cisco CyberOps</p>
+  </div>
+  <div class="divider"></div>
+
+  <div class="card text-center font-bold text-cyan-300">Choose Subdomain</div>
+
+  <!-- Branching Subdomains -->
+  <div class="branch">
+    <div class="card">
+      <h2 class="font-bold text-lg text-cyan-400">Cloud Security</h2>
+      <p><b>Work:</b> Secure AWS/Azure/GCP, IAM, containers</p>
+      <p><b>Tools:</b> CSPM, Prisma, Wiz</p>
+      <p><b>Certs:</b> CCSK, AWS Sec Spec</p>
+    </div>
+    <div class="card">
+      <h2 class="font-bold text-lg text-cyan-400">Application Security</h2>
+      <p><b>Work:</b> Secure code, reviews, exploits</p>
+      <p><b>Tools:</b> Burp, ZAP, SAST/DAST</p>
+      <p><b>Certs:</b> OSWE, CSSLP</p>
+    </div>
+    <div class="card">
+      <h2 class="font-bold text-lg text-cyan-400">Network Security</h2>
+      <p><b>Work:</b> Firewalls, VPN, IDS/IPS</p>
+      <p><b>Tools:</b> Cisco, Palo Alto, CheckPoint</p>
+      <p><b>Certs:</b> CCNA, PCNSE</p>
+    </div>
+    <div class="card">
+      <h2 class="font-bold text-lg text-cyan-400">SOC / CSIRT</h2>
+      <p><b>Work:</b> Threat detection, incidents</p>
+      <p><b>Tools:</b> SIEM, EDR, Splunk</p>
+      <p><b>Certs:</b> CySA+, GCIA</p>
+    </div>
+    <div class="card">
+      <h2 class="font-bold text-lg text-cyan-400">Identity & Access Mgmt</h2>
+      <p><b>Work:</b> IAM, MFA, privilege mgmt</p>
+      <p><b>Tools:</b> Okta, AD, SailPoint</p>
+      <p><b>Certs:</b> CISM, CISSP</p>
+    </div>
+  </div>
+
+  <!-- Second row of branches -->
+  <div class="branch">
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">SOC Analyst</h2><p><b>Tools:</b> EDR, SIEM, Zeek</p><p><b>Certs:</b> CySA+, GCIH</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Pentesting</h2><p><b>Tools:</b> Nmap, Metasploit</p><p><b>Certs:</b> OSCP, eJPT</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">GRC / Risk</h2><p><b>Tools:</b> Archer, AuditBoard</p><p><b>Certs:</b> CISA, CRISC</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Digital Forensics</h2><p><b>Tools:</b> FTK, Autopsy, X-Ways</p><p><b>Certs:</b> GCFA, CHFI</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Malware & Threat Intel</h2><p><b>Tools:</b> IDA, Ghidra, YARA</p><p><b>Certs:</b> GREM, CTIA</p></div>
+  </div>
+
+  <!-- Third row of branches -->
+  <div class="branch">
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">DevSecOps</h2><p><b>Tools:</b> Jenkins, GitLab, K8s</p><p><b>Certs:</b> CKS, Terraform</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Application Hardening</h2><p><b>Tools:</b> RASP, SCA, WAF</p><p><b>Certs:</b> OSWE, GIAC</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Cloud Risk</h2><p><b>Tools:</b> CSPM, GRC Suites</p><p><b>Certs:</b> CCSP, ISO27k</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Security Awareness</h2><p><b>Tools:</b> LMS, PhishSim</p><p><b>Certs:</b> Security+</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">IoT / OT Security</h2><p><b>Tools:</b> Claroty, Nozomi, Dragos</p><p><b>Certs:</b> GICSP, ISA/IEC</p></div>
+  </div>
 
 </body>
 </html>
