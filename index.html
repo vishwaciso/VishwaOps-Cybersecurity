@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cybersecurity Roadmap</title>
+  <title>VishwaOps - Cybersecurity Roadmap</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -38,11 +38,19 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    .horizontal {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem auto;
+      max-width: 1200px;
+    }
   </style>
 </head>
 <body class="p-6">
 
-  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8">Cybersecurity Roadmap 🚀</h1>
+  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8">VishwaOps - Cybersecurity Roadmap 🚀</h1>
 
   <!-- Common Path -->
   <div class="card text-center font-bold text-cyan-300">Common Prerequisites</div>
@@ -104,45 +112,23 @@
     <p><b>Tools:</b> Snort, Suricata, Splunk, Zeek</p>
     <p><b>Certs:</b> Splunk Core, Cisco CyberOps</p>
   </div>
+
+  <!-- Horizontal Verticals -->
   <div class="divider"></div>
-
-  <div class="card text-center font-bold text-cyan-300">Choose Subdomain</div>
-
-  <!-- Branching Subdomains -->
-  <div class="branch">
-    <div class="card">
-      <h2 class="font-bold text-lg text-cyan-400">Cloud Security</h2>
-      <p><b>Work:</b> Secure AWS/Azure/GCP, IAM, containers</p>
-      <p><b>Tools:</b> CSPM, Prisma, Wiz</p>
-      <p><b>Certs:</b> CCSK, AWS Sec Spec</p>
-    </div>
-    <div class="card">
-      <h2 class="font-bold text-lg text-cyan-400">Application Security</h2>
-      <p><b>Work:</b> Secure code, reviews, exploits</p>
-      <p><b>Tools:</b> Burp, ZAP, SAST/DAST</p>
-      <p><b>Certs:</b> OSWE, CSSLP</p>
-    </div>
-    <div class="card">
-      <h2 class="font-bold text-lg text-cyan-400">Network Security</h2>
-      <p><b>Work:</b> Firewalls, VPN, IDS/IPS</p>
-      <p><b>Tools:</b> Cisco, Palo Alto, CheckPoint</p>
-      <p><b>Certs:</b> CCNA, PCNSE</p>
-    </div>
-    <div class="card">
-      <h2 class="font-bold text-lg text-cyan-400">SOC / CSIRT</h2>
-      <p><b>Work:</b> Threat detection, incidents</p>
-      <p><b>Tools:</b> SIEM, EDR, Splunk</p>
-      <p><b>Certs:</b> CySA+, GCIA</p>
-    </div>
-    <div class="card">
-      <h2 class="font-bold text-lg text-cyan-400">Identity & Access Mgmt</h2>
-      <p><b>Work:</b> IAM, MFA, privilege mgmt</p>
-      <p><b>Tools:</b> Okta, AD, SailPoint</p>
-      <p><b>Certs:</b> CISM, CISSP</p>
-    </div>
+  <h2 class="text-2xl text-center font-bold text-cyan-300 my-6">Cybersecurity Verticals</h2>
+  <div class="horizontal">
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Cloud Security</h2><p><b>Work:</b> Secure AWS/Azure/GCP, IAM, containers</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Application Security</h2><p><b>Work:</b> Secure code, reviews, exploits</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Network Security</h2><p><b>Work:</b> Firewalls, VPN, IDS/IPS</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">SOC / CSIRT</h2><p><b>Work:</b> Threat detection, incidents</p></div>
+    <div class="card"><h2 class="font-bold text-lg text-cyan-400">Identity & Access Mgmt</h2><p><b>Work:</b> IAM, MFA, privilege mgmt</p></div>
   </div>
 
-  <!-- Second row of branches -->
+  <div class="divider"></div>
+  <div class="card text-center font-bold text-cyan-300">Choose Subdomain</div>
+  <div class="divider"></div>
+
+  <!-- Branching Subdomains -->
   <div class="branch">
     <div class="card"><h2 class="font-bold text-lg text-cyan-400">SOC Analyst</h2><p><b>Tools:</b> EDR, SIEM, Zeek</p><p><b>Certs:</b> CySA+, GCIH</p></div>
     <div class="card"><h2 class="font-bold text-lg text-cyan-400">Pentesting</h2><p><b>Tools:</b> Nmap, Metasploit</p><p><b>Certs:</b> OSCP, eJPT</p></div>
