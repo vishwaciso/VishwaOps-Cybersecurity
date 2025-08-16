@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cybersecurity Roadmap</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Framer Motion -->
+  <script src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
+
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: 'Inter', sans-serif;
+    }
+    .roadmap-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .roadmap-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #38bdf8;
+    }
+    .divider {
+      width: 4px;
+      height: 40px;
+      background: #38bdf8;
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="p-6">
+
+  <h1 class="text-4xl font-bold text-center text-cyan-400 mb-8">
+    Cybersecurity Roadmap 🚀
+  </h1>
+
+  <div id="roadmap"></div>
+
+  <script>
+    // Roadmap Data
+    const roadmapData = [
+      {
+        title: "1. Networking Fundamentals",
+        work: "Configure firewalls, troubleshoot connectivity, understand TCP/IP, DNS, HTTP/HTTPS, VPNs, Subnets.",
+        tools: "Wireshark, Nmap, Cisco Packet Tracer",
+        certs: "CompTIA Network+, Cisco CCNA"
+      },
+      {
+        title: "2. Operating Systems",
+        work: "Administer Windows & Linux, manage logs, users, permissions, CLI.",
+        tools: "Event Viewer, Sysmon, journalctl, top, ps",
+        certs: "CompTIA Linux+, Microsoft MTA/MCSA"
+      },
+      {
+        title: "3. Programming / Scripting",
+        work: "Automate tasks, write security scripts, analyze malware, develop tools.",
+        tools: "Python, Git, VSCode, Jupyter Notebooks",
+        certs: "Python Institute, Offensive Security (OSWE)"
+      },
+      {
+        title: "3a. Shell Scripting (Bash)",
+        work: "Automate Linux admin, write log parsers, cronjobs, automate security checks.",
+        tools: "Bash/Zsh, sed, awk, grep, cron",
+        certs: "LPIC-1, CompTIA Linux+",
+        how: "Write scripts to detect anomalies & automate patching"
+      },
+      {
+        title: "3b. PowerShell Scripting",
+        work: "Automate Windows sec, manage AD, extract logs, incident response.",
+        tools: "PowerShell ISE, Empire, BloodHound, PSRead",
+        certs: "Microsoft MCSA, SANS SEC505",
+        how: "Write scripts for user mgmt, log scraping, defense"
+      },
+      {
+        title: "4. Cybersecurity Fundamentals",
+        work: "Learn CIA triad, analyze threats/vulnerabilities, apply encryption/hashing.",
+        tools: "Burp Suite, Nessus, Hashcat, OpenVAS",
+        certs: "CompTIA Security+, ISC2 SSCP"
+      },
+      {
+        title: "5. Basic Security Tools",
+        work: "Use IDS/IPS, Antivirus, Wireshark, log monitoring.",
+        tools: "Snort, Suricata, Splunk, ELK, Zeek",
+        certs: "Splunk Core Certified, Cisco CyberOps Associate"
+      }
+    ];
+
+    // Render Roadmap
+    const container = document.getElementById("roadmap");
+
+    roadmapData.forEach((step, i) => {
+      const card = document.createElement("div");
+      card.className = "roadmap-card";
+      card.innerHTML = `
+        <h2 class="section-title">${step.title}</h2>
+        <p><strong>Work:</strong> ${step.work}</p>
+        <p><strong>Tools:</strong> ${step.tools}</p>
+        <p><strong>Certifications:</strong> ${step.certs}</p>
+        ${step.how ? `<p><strong>How:</strong> ${step.how}</p>` : ""}
+      `;
+      container.appendChild(card);
+
+      if (i < roadmapData.length - 1) {
+        const divider = document.createElement("div");
+        divider.className = "divider";
+        container.appendChild(divider);
+      }
+    });
+
+    // Framer Motion Animations
+    const { animate } = window.framerMotion;
+    document.querySelectorAll(".roadmap-card").forEach((el, idx) => {
+      animate(el, { opacity: [0, 1], y: [50, 0] }, { duration: 0.8, delay: idx * 0.2 });
+    });
+  </script>
+
+</body>
+</html>
