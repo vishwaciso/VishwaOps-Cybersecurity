@@ -3,22 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Cybersecurity Learning Path</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <title>Terraform Zero to Hero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --cyber-blue: #0abdc6;
-            --cyber-purple: #711c91;
-            --cyber-pink: #ea00d9;
-            --cyber-dark: #0f2027;
+            --primary: #5c6bc0;
+            --primary-dark: #3949ab;
+            --secondary: #26a69a;
+            --dark: #263238;
+            --light: #f5f5f5;
         }
         
         * {
@@ -29,236 +23,604 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--cyber-dark);
-            color: var(--light);
+            background-color: var(--light);
+            color: var(--dark);
             line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
         
-        /* Cyber Rain Animation - Slower version */
-        .cyber-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
             overflow: hidden;
         }
         
-        .raindrop {
+        header::after {
+            content: '';
             position: absolute;
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, transparent, var(--cyber-blue));
-            animation: rain linear infinite;
-            opacity: 0.4;
-        }
-        
-        .raindrop::before {
-            content: attr(data-attack);
-            position: absolute;
-            top: 100%;
+            bottom: -50px;
             left: 0;
-            color: var(--cyber-pink);
-            font-size: 10px;
-            white-space: nowrap;
-            text-shadow: 0 0 5px rgba(234, 0, 217, 0.7);
-            opacity: 0.8;
+            right: 0;
+            height: 100px;
+            background-color: var(--light);
+            transform: skewY(-2deg);
+            z-index: 1;
         }
         
-        @keyframes rain {
-            0% { transform: translateY(-100vh) rotate(5deg); }
-            100% { transform: translateY(100vh) rotate(5deg); }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s;
         }
         
-        /* Enhanced Umbrella Animation */
-        .umbrella-container {
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            animation: fadeIn 1.5s;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 50px;
+            color: var(--primary-dark);
             position: relative;
-            width: 100%;
-            height: 400px;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2);
+            color: var(--secondary);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        /* Syllabus Section */
+        .syllabus {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .modules-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .module {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+        
+        .module:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .module-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-header:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .module-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .module-icon {
+            transition: transform 0.3s;
+        }
+        
+        .module.active .module-icon {
+            transform: rotate(180deg);
+        }
+        
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #f9f9f9;
+        }
+        
+        .module.active .module-content {
+            max-height: 1000px;
+        }
+        
+        .topics-list {
+            padding: 20px;
+        }
+        
+        .topics-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .topics-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+        
+        /* Course Cards Section */
+        .course-cards {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-color: var(--primary);
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 50px;
-            perspective: 1000px;
-        }
-        
-        .umbrella {
-            width: 350px;
-            height: 350px;
-            position: relative;
-            z-index: 2;
-            transform-style: preserve-3d;
-            animation: umbrellaFloat 6s ease-in-out infinite;
-        }
-        
-        @keyframes umbrellaFloat {
-            0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(0); }
-            50% { transform: translateY(-20px) rotateX(5deg) rotateY(5deg); }
-        }
-        
-        .umbrella-canvas {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        
-        .umbrella-top {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(
-                var(--cyber-purple),
-                #5a189a,
-                #7b2cbf,
-                #9d4edd,
-                #c77dff,
-                #e0aaff,
-                var(--cyber-purple)
-            );
-            border-radius: 50% 50% 0 0;
-            transform: rotateX(70deg);
-            box-shadow: 0 0 30px rgba(123, 44, 191, 0.6);
-            border: 2px solid rgba(234, 0, 217, 0.3);
-        }
-        
-        .umbrella-ribs {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        
-        .umbrella-rib {
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--cyber-pink), transparent);
-            top: 0;
-            left: 50%;
-            transform-origin: bottom center;
-        }
-        
-        .umbrella-pole {
-            position: absolute;
-            width: 10px;
-            height: 200px;
-            background: linear-gradient(to bottom, #333, #666);
-            bottom: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 0 0 5px 5px;
-        }
-        
-        .umbrella-handle {
-            position: absolute;
-            width: 30px;
-            height: 60px;
-            background: linear-gradient(to bottom, #666, #333);
-            bottom: -260px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 0 0 15px 15px;
-        }
-        
-        .umbrella-title {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             color: white;
-            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+        }
+        
+        .card-content {
+            padding: 30px;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+        
+        .card-text {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .card-link {
+            display: inline-block;
+            color: var(--secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .card-link:hover {
+            color: var(--primary-dark);
+        }
+        
+        .card-link i {
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .card-link:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
             text-align: center;
-            z-index: 3;
-            text-shadow: 0 0 10px var(--cyber-blue);
-            width: 100%;
-            padding: 20px;
-            background: rgba(15, 32, 39, 0.7);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(10, 189, 198, 0.3);
-            border: 1px solid var(--cyber-blue);
         }
         
-        .umbrella-title h2 {
+        .footer-logo {
             font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--cyber-blue);
-            animation: textGlow 2s ease-in-out infinite alternate;
+            font-weight: 700;
+            margin-bottom: 20px;
         }
         
-        .umbrella-title p {
-            font-size: 1rem;
-            color: var(--cyber-pink);
+        .footer-logo span {
+            color: var(--secondary);
         }
         
-        /* Rest of your existing CSS styles... */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
         
+        .footer-links a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            margin-bottom: 30px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            line-height: 40px;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .module-title {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Cyber Rain Animation - Slower version -->
-    <div class="cyber-rain" id="cyberRain"></div>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">Terraform <span>Zero to Hero</span></h1>
+            <p class="tagline">Master Infrastructure as Code with our comprehensive course</p>
+            <a href="#syllabus" class="cta-button">Explore Syllabus</a>
+        </div>
+    </header>
     
-    <!-- Enhanced Umbrella Section -->
-    <div class="umbrella-container">
-        <div class="umbrella">
-            <div class="umbrella-canvas">
-                <div class="umbrella-top"></div>
-                <div class="umbrella-ribs" id="umbrellaRibs"></div>
-                <div class="umbrella-pole"></div>
-                <div class="umbrella-handle"></div>
-            </div>
-            <div class="umbrella-title">
-                <h2>CYBERSECURITY DOMAINS</h2>
-                <p>Protection Against Digital Threats</p>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why This Course?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3 class="feature-title">Hands-on Labs</h3>
+                    <p>Learn by doing with real-world exercises and projects that reinforce each concept.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cloud"></i></div>
+                    <h3 class="feature-title">Multi-Cloud Focus</h3>
+                    <p>Master Terraform across AWS, Azure, and GCP with our comprehensive modules.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+                    <h3 class="feature-title">Career Ready</h3>
+                    <p>Gain skills that are in high demand and boost your DevOps career prospects.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
     
-    <!-- Rest of your HTML content... -->
-
+    <!-- Syllabus Section -->
+    <section id="syllabus" class="syllabus">
+        <div class="container">
+            <h2 class="section-title">Course Syllabus</h2>
+            <div class="modules-container">
+                <!-- Module 1 -->
+                <div class="module">
+                    <div class="module-header">
+                        <h3 class="module-title">Module 1: Terraform Fundamentals</h3>
+                        <i class="fas fa-chevron-down module-icon"></i>
+                    </div>
+                    <div class="module-content">
+                        <ul class="topics-list">
+                            <li>Introduction to Infrastructure as Code</li>
+                            <li>Terraform installation and setup</li>
+                            <li>Basic Terraform syntax and commands</li>
+                            <li>Writing your first configuration</li>
+                            <li>Variables and outputs</li>
+                            <li>Resource dependencies</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 2 -->
+                <div class="module">
+                    <div class="module-header">
+                        <h3 class="module-title">Module 2: Working with Providers</h3>
+                        <i class="fas fa-chevron-down module-icon"></i>
+                    </div>
+                    <div class="module-content">
+                        <ul class="topics-list">
+                            <li>AWS provider deep dive</li>
+                            <li>Azure provider configuration</li>
+                            <li>Google Cloud provider setup</li>
+                            <li>Multi-cloud deployments</li>
+                            <li>Provider versioning</li>
+                            <li>Authentication methods</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 3 -->
+                <div class="module">
+                    <div class="module-header">
+                        <h3 class="module-title">Module 3: State Management</h3>
+                        <i class="fas fa-chevron-down module-icon"></i>
+                    </div>
+                    <div class="module-content">
+                        <ul class="topics-list">
+                            <li>Understanding Terraform state</li>
+                            <li>Local vs remote state</li>
+                            <li>State locking</li>
+                            <li>State inspection commands</li>
+                            <li>Importing existing resources</li>
+                            <li>Terraform Cloud for state management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 4 -->
+                <div class="module">
+                    <div class="module-header">
+                        <h3 class="module-title">Module 4: Modules and Workspaces</h3>
+                        <i class="fas fa-chevron-down module-icon"></i>
+                    </div>
+                    <div class="module-content">
+                        <ul class="topics-list">
+                            <li>Creating and using modules</li>
+                            <li>Module composition</li>
+                            <li>Public module registry</li>
+                            <li>Private module repositories</li>
+                            <li>Workspace concepts</li>
+                            <li>Environment management with workspaces</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Module 5 -->
+                <div class="module">
+                    <div class="module-header">
+                        <h3 class="module-title">Module 5: Advanced Concepts</h3>
+                        <i class="fas fa-chevron-down module-icon"></i>
+                    </div>
+                    <div class="module-content">
+                        <ul class="topics-list">
+                            <li>Dynamic blocks</li>
+                            <li>Conditional expressions</li>
+                            <li>Custom providers</li>
+                            <li>Terragrunt for DRY configurations</li>
+                            <li>Policy as Code with Sentinel</li>
+                            <li>Testing with Terratest</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Course Cards Section -->
+    <section class="course-cards">
+        <div class="container">
+            <h2 class="section-title">Learning Paths</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-image">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Beginner Track</h3>
+                        <p class="card-text">Start from scratch and build a solid foundation in Terraform and Infrastructure as Code concepts.</p>
+                        <a href="#" class="card-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Intermediate Track</h3>
+                        <p class="card-text">Dive deeper into modules, workspaces, and state management for production-grade deployments.</p>
+                        <a href="#" class="card-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Advanced Track</h3>
+                        <p class="card-text">Master advanced patterns, testing, and policy enforcement for enterprise environments.</p>
+                        <a href="#" class="card-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Terraform <span>Zero to Hero</span></div>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#syllabus">Syllabus</a>
+                <a href="#">Pricing</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="copyright">© 2023 Terraform Zero to Hero. All rights reserved.</p>
+        </div>
+    </footer>
+    
     <script>
-        // Slower cyber rain animation with attack types
-        const cyberRain = document.getElementById('cyberRain');
-        const attackTypes = [
-            "DDoS", "Phishing", "SQLi", "XSS", "MITM", "Zero-Day", 
-            "Ransomware", "APT", "Credential Stuffing", "Brute Force",
-            "CSRF", "SSRF", "XXE", "LFI/RFI", "Insecure Deserialization",
-            "API Abuse", "IoT Exploit", "Cloud Misconfig", "Supply Chain",
-            "Insider Threat", "Eavesdropping", "Session Hijack", "DNS Spoof",
-            "BEC", "Malvertising"
-        ];
+        // Toggle module content
+        document.querySelectorAll('.module-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const module = header.parentElement;
+                module.classList.toggle('active');
+            });
+        });
         
-        for (let i = 0; i < 40; i++) { // Reduced number of raindrops
-            const drop = document.createElement('div');
-            drop.className = 'raindrop';
-            drop.style.left = `${Math.random() * 100}%`;
-            drop.style.animationDuration = `${4 + Math.random() * 4}s`; // Slower animation
-            drop.style.animationDelay = `${Math.random() * 5}s`;
-            drop.dataset.attack = attackTypes[Math.floor(Math.random() * attackTypes.length)];
-            cyberRain.appendChild(drop);
-        }
-        
-        // Create umbrella ribs
-        const umbrellaRibs = document.getElementById('umbrellaRibs');
-        for (let i = 0; i < 8; i++) {
-            const rib = document.createElement('div');
-            rib.className = 'umbrella-rib';
-            rib.style.transform = `rotate(${i * 45}deg)`;
-            umbrellaRibs.appendChild(rib);
-        }
-        
-        // Rest of your JavaScript...
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html>
