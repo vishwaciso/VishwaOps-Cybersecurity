@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cybersecurity Workshop Docs</title>
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- highlight.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- Lunr.js for client-side search -->
+  <script src="https://cdn.jsdelivr.net/npm/lunr/lunr.min.js"></script>
+
+  <style>
+    /* Smooth sidebar scroll */
+    #sidebar { scroll-behavior: smooth; }
+    /* Content typography */
+    .prose pre { position: relative; }
+    .copy-btn { position:absolute; top:0.5rem; right:0.5rem; font-size:12px; }
+    .doc-link.active { background: rgba(59,130,246,0.15); color:#1d4ed8; }
+  </style>
+</head>
+<body class="bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+  <!-- Top Bar -->
+  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 border-b border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold">CS</span>
+        <span class="font-semibold text-lg">Cybersecurity Docs</span>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <button id="themeToggle" class="rounded-xl border border-slate-300 dark:border-slate-700 px-3 py-1 text-sm hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2">
+          <i data-lucide="moon"></i>
+          <span>Theme</span>
+        </button>
+        <a href="https://github.com/" target="_blank" class="rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-3 py-1 text-sm font-medium">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="md:col-span-3 lg:col-span-3 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 p-3">
+      <div class="flex items-center gap-2 mb-3">
+        <i data-lucide="search" class="h-4 w-4"></i>
+        <input id="search" type="search" placeholder="Search docs..." class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none" />
+      </div>
+
+      <nav id="toc" class="space-y-2 text-sm">
+        <!-- Populated by JS from docsManifest below -->
+      </nav>
+
+      <div class="mt-4 text-[12px] text-slate-500">
+        <p>Tip: Press <kbd class="rounded bg-slate-200 dark:bg-slate-800 px-1">/</kbd> to focus search.</p>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <section class="md:col-span-9 lg:col-span-9">
+      <article id="content" class="prose prose-slate dark:prose-invert max-w-none">
+        <!-- Markdown renders here -->
+      </article>
+      <hr class="my-8 border-slate-200 dark:border-slate-800" />
+      <footer class="text-xs text-slate-500">
+        © <span id="year"></span> Cybersecurity Docs. Built for students to learn by doing.
+      </footer>
+    </section>
+  </main>
+
+  <!-- JS: App -->
+  <script>
+    // ====== Settings ======
+    const docsRoot = 'docs'; // Folder where your .md files live
+
+    // A simple manifest of docs (path => title). You can add more items.
+    const docsManifest = [
+      { path: 'intro.md', title: 'Welcome & How to Use' },
+      { path: 'prerequisites.md', title: 'Prerequisites' },
+      { path: 'network/overview.md', title: 'Network Security – Overview' },
+      { path: 'network/attacks.md', title: 'Network Attacks (DoS/DDoS, MITM)' },
+      { path: 'web/overview.md', title: 'Web Security – Overview' },
+      { path: 'web/xss.md', title: 'XSS – Concept & Demo' },
+      { path: 'web/csrf.md', title: 'CSRF – Concept & Demo' },
+      { path: 'api/overview.md', title: 'API Security – Overview' },
+      { path: 'cloud/overview.md', title: 'Cloud Security – Shared Responsibility' },
+      { path: 'blue/siem-labs.md', title: 'Blue Team – SIEM Mini Labs' },
+      { path: 'extras/tools.md', title: 'Tools & Cheat Sheets' }
+    ];
+
+    // ====== Theme ======
+    const themeToggle = document.getElementById('themeToggle');
+    const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    function applyTheme() {
+      const dark = savedTheme ? savedTheme === 'dark' : preferDark;
+      document.documentElement.classList.toggle('dark', dark);
+    }
+    applyTheme();
+    themeToggle.addEventListener('click', () => {
+      const nowDark = !document.documentElement.classList.contains('dark');
+      document.documentElement.classList.toggle('dark', nowDark);
+      localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+    });
+
+    // ====== Build Sidebar ======
+    const toc = document.getElementById('toc');
+    const groups = {
+      'Getting Started': ['intro.md', 'prerequisites.md'],
+      'Network Security': ['network/overview.md', 'network/attacks.md'],
+      'Web Security': ['web/overview.md', 'web/xss.md', 'web/csrf.md'],
+      'API Security': ['api/overview.md'],
+      'Cloud Security': ['cloud/overview.md'],
+      'Blue Team': ['blue/siem-labs.md'],
+      'Extras': ['extras/tools.md']
+    };
+
+    function makeGroup(title, items) {
+      const wrap = document.createElement('div');
+      wrap.className = 'border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden';
+
+      const header = document.createElement('button');
+      header.className = 'w-full flex items-center justify-between px-3 py-2 bg-white/70 dark:bg-slate-900/70 text-left font-medium';
+      header.innerHTML = `<span>${title}</span><i data-lucide="chevron-down" class="h-4 w-4"></i>`;
+      const list = document.createElement('div');
+      list.className = 'divide-y divide-slate-200 dark:divide-slate-800';
+
+      items.forEach(p => {
+        const meta = docsManifest.find(d => d.path === p);
+        if (!meta) return;
+        const a = document.createElement('a');
+        a.href = `#/${p}`;
+        a.textContent = meta.title;
+        a.dataset.path = p;
+        a.className = 'doc-link block px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800';
+        list.appendChild(a);
+      });
+
+      header.addEventListener('click', () => list.classList.toggle('hidden'));
+      wrap.appendChild(header);
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    Object.entries(groups).forEach(([title, items]) => toc.appendChild(makeGroup(title, items)));
+
+    // ====== Router & Loader ======
+    const content = document.getElementById('content');
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    async function loadDoc(path) {
+      // set active link
+      document.querySelectorAll('.doc-link').forEach(a => a.classList.toggle('active', a.dataset.path === path));
+      try {
+        const res = await fetch(`${docsRoot}/${path}`);
+        if (!res.ok) throw new Error('Not found');
+        const md = await res.text();
+        const html = marked.parse(md, { mangle: false, headerIds: true });
+        content.innerHTML = html;
+        // post-process code blocks
+        content.querySelectorAll('pre code').forEach(block => {
+          hljs.highlightElement(block);
+          const btn = document.createElement('button');
+          btn.textContent = 'Copy';
+          btn.className = 'copy-btn rounded-md border border-slate-300 dark:border-slate-700 px-2 py-1';
+          btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(block.innerText);
+            btn.textContent = 'Copied!';
+            setTimeout(() => (btn.textContent = 'Copy'), 1200);
+          });
+          block.parentElement.appendChild(btn);
+        });
+        // scroll to top on navigation
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        content.innerHTML = `<h1 class="text-2xl font-semibold">404</h1><p class="mt-2">Could not load <code>${path}</code>. Make sure the file exists in <code>/${docsRoot}</code>.</p>`;
+      }
+    }
+
+    function currentPath() {
+      const hash = location.hash.replace(/^#\/?/, '');
+      return hash || 'intro.md';
+    }
+
+    window.addEventListener('hashchange', () => loadDoc(currentPath()));
+
+    // ====== Search (Lunr) ======
+    let idx = null;
+    const searchInput = document.getElementById('search');
+
+    async function buildSearch() {
+      const docs = [];
+      for (const d of docsManifest) {
+        try {
+          const res = await fetch(`${docsRoot}/${d.path}`);
+          if (!res.ok) continue;
+          const text = await res.text();
+          docs.push({ id: d.path, title: d.title, text });
+        } catch (_) {}
+      }
+      idx = lunr(function () {
+        this.ref('id');
+        this.field('title');
+        this.field('text');
+        docs.forEach(doc => this.add(doc));
+      });
+      return docs;
+    }
+
+    let docsCache = [];
+    buildSearch().then(d => (docsCache = d));
+
+    function renderSearchResults(results) {
+      // Clear previous highlights
+      document.querySelectorAll('.doc-link').forEach(a => a.classList.remove('active'));
+      // Build a quick result panel below the search box
+      let panel = document.getElementById('search-panel');
+      if (!panel) {
+        panel = document.createElement('div');
+        panel.id = 'search-panel';
+        panel.className = 'mt-2 max-h-72 overflow-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900';
+        document.getElementById('sidebar').insertBefore(panel, document.getElementById('toc'));
+      }
+      panel.innerHTML = '';
+      if (!results.length) {
+        panel.innerHTML = '<div class="px-3 py-2 text-sm text-slate-500">No matches</div>';
+        return;
+      }
+      results.slice(0, 12).forEach(r => {
+        const meta = docsManifest.find(d => d.path === r.ref) || { title: r.ref };
+        const item = document.createElement('a');
+        item.href = `#/${r.ref}`;
+        item.className = 'block px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm';
+        item.innerHTML = `<div class="font-medium">${meta.title}</div><div class="text-xs text-slate-500">${r.ref}</div>`;
+        panel.appendChild(item);
+      });
+    }
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === '/' && !e.target.value) {
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.trim();
+      const panel = document.getElementById('search-panel');
+      if (!q) {
+        if (panel) panel.remove();
+        return;
+      }
+      if (!idx) return;
+      const results = idx.search(q);
+      renderSearchResults(results);
+    });
+
+    // ====== Init ======
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      loadDoc(currentPath());
+    });
+  </script>
+
+  <!--
+  =============================
+  HOW TO USE (README)
+  =============================
+
+  1) Create this folder structure in your repo:
+
+     / (root)
+     ├─ index.html  <-- (this file)
+     └─ docs/
+        ├─ intro.md
+        ├─ prerequisites.md
+        ├─ network/
+        │   ├─ overview.md
+        │   └─ attacks.md
+        ├─ web/
+        │   ├─ overview.md
+        │   ├─ xss.md
+        │   └─ csrf.md
+        ├─ api/
+        │   └─ overview.md
+        ├─ cloud/
+        │   └─ overview.md
+        ├─ blue/
+        │   └─ siem-labs.md
+        └─ extras/
+            └─ tools.md
+
+  2) Put your lesson content into those .md files. Examples are below.
+
+  3) Push to GitHub ➜ Settings ➜ Pages ➜ Build from a branch ➜ set branch = main, folder = /root (or /docs) ➜ Save.
+
+  4) Your site will be served at: https://<your-username>.github.io/<repo-name>/
+
+  5) To add a new page: add a new .md under /docs and then add its path & title
+     to the docsManifest array near the top of this file.
+
+  =============================
+  SAMPLE MARKDOWN PAGES
+  =============================
+  Copy these into matching files under /docs/
+
+  --- docs/intro.md ---
+  # Cybersecurity Workshop – Welcome
+
+  **Goal:** Learn by doing. Each topic has a 5–15 min mini-lab.
+
+  **How this site works**
+  - Use the left sidebar to navigate modules
+  - Use search (press "/") to find topics fast
+  - Code blocks have a **Copy** button
+  - Dark/Light theme toggle in the top-right
+
+  > Pro tip: Fork this repo for your class and customize the content.
+
+  --- docs/prerequisites.md ---
+  # Prerequisites
+
+  - Basic Linux commands
+  - Browser (Chrome/Firefox)
+  - Optional: AWS free tier account for cloud labs
+  - Recommended: VS Code & Git
+
+  **Setup Cheatsheet**
+  ```bash
+  # macOS/Linux
+  sudo apt update && sudo apt install -y git
+  git clone https://github.com/<you>/<repo>.git
+  ```
+
+  --- docs/network/overview.md ---
+  # Network Security – Overview
+
+  - CIA triad, threat surface, defense-in-depth
+  - Common controls: Firewalls, NACLs, Security Groups, IDS/IPS
+
+  **Mini-lab:** Capture ICMP with tcpdump
+  ```bash
+  sudo tcpdump -i any icmp
+  ping -c 3 8.8.8.8
+  ```
+
+  --- docs/network/attacks.md ---
+  # Network Attacks (DoS/DDoS, MITM)
+
+  - DoS vs DDoS basics, bandwidth/connection/CPU exhaustion
+  - MITM via ARP spoof (for lab-only networks)
+
+  **Mitigation:** WAF/CDN rate-limits, AWS Shield, security groups, segmentation
+
+  --- docs/web/overview.md ---
+  # Web Security – Overview
+
+  - OWASP Top 10: Injection, XSS, CSRF, SSRF, etc.
+  - Secure headers: CSP, X-Frame-Options, HSTS
+
+  --- docs/web/xss.md ---
+  # Cross-Site Scripting (XSS)
+
+  **Layman:** Tricking a page to run your script.
+
+  **Technical:** Injecting untrusted JS into a victim's browser via reflected/stored/DOM XSS.
+
+  **Demo (simple HTML page):**
+  ```html
+  <!doctype html>
+  <html>
+  <body>
+    <h3>XSS Demo</h3>
+    <form method="GET">
+      <input name="q" placeholder="Type anything" />
+      <button>Search</button>
+    </form>
+    <div id="out"></div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      // Vulnerable: unsafely injecting user input into innerHTML
+      document.getElementById('out').innerHTML = 'You searched: ' + (params.get('q') || '');
+    </script>
+  </body>
+  </html>
+  ```
+
+  Test payload: `<img src=x onerror=alert(1)>`
+
+  **Fix:** sanitize/escape, use `textContent`, set CSP.
+
+  --- docs/web/csrf.md ---
+  # CSRF – Cross-Site Request Forgery
+
+  **Layman:** Another site makes your browser submit a form without you knowing.
+
+  **Technical:** Abusing ambient auth (cookies) to perform unwanted state changes.
+
+  **Demo idea:** A hidden auto-submitting form that POSTs to `/transfer` when the user visits attacker page.
+
+  **Fix:** CSRF tokens, SameSite cookies, double-submit, check Origin/Referer.
+
+  --- docs/api/overview.md ---
+  # API Security – Overview
+
+  - Broken object level authorization (BOLA)
+  - Rate limiting, authn/z, input validation
+
+  --- docs/cloud/overview.md ---
+  # Cloud Security – Shared Responsibility
+
+  - Provider vs Customer responsibilities
+  - Examples: AWS S3 public buckets, IAM least privilege
+
+  --- docs/blue/siem-labs.md ---
+  # Blue Team – SIEM Mini Labs
+
+  **Objective:** Parse logs and detect failed SSH brute force
+
+  ```bash
+  grep "Failed password" /var/log/auth.log | awk '{print $11}' | sort | uniq -c | sort -nr | head
+  ```
+
+  --- docs/extras/tools.md ---
+  # Tools & Cheat Sheets
+
+  - nmap, nikto, burp suite, zap
+  - curl, jq, httpie
+  - MITRE ATT&CK, OWASP Top 10
+
+  =============================
+  GITHUB PAGES DEPLOY (QUICK)
+  =============================
+  1. Create a new repo on GitHub (public or private).
+  2. Add the folder structure above, commit, and push.
+  3. In the repo ➜ Settings ➜ Pages ➜ Source = "Deploy from a branch".
+     - Branch = main (or master)
+     - Folder = / (root)
+  4. Wait 1–2 minutes. Your site will be live at https://<user>.github.io/<repo>/
+
+  CUSTOM DOMAIN (OPTIONAL)
+  - Add a CNAME file at repo root with your domain, e.g., `docs.vishwaops.com`
+  - In DNS, create a CNAME record: host = docs, value = <user>.github.io
+
+  NOTE FOR STUDENT ACCESS
+  - This site is static; no server required.
+  - All search is client-side; large docs may load slower on first build.
+  - You can host demos in separate repos and link to them.
+
+  -->
+</body>
+</html>
